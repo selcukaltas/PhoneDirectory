@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneDirectory.DirectoryApp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneDirectory.DirectoryInfrastructure", "Services\Directory\PhoneDirectory.DirectoryInfrastructure\PhoneDirectory.DirectoryInfrastructure.csproj", "{305723E9-7568-4AEF-B048-40BAB89655A2}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{1DDA468E-71A1-4C34-9018-32A33FF288C5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PhoneDirectory.Shared", "Shared\PhoneDirectory.Shared\PhoneDirectory.Shared.csproj", "{AF462010-C0CE-4F9E-AEB3-3286229FE84B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +41,10 @@ Global
 		{305723E9-7568-4AEF-B048-40BAB89655A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{305723E9-7568-4AEF-B048-40BAB89655A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{305723E9-7568-4AEF-B048-40BAB89655A2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AF462010-C0CE-4F9E-AEB3-3286229FE84B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AF462010-C0CE-4F9E-AEB3-3286229FE84B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AF462010-C0CE-4F9E-AEB3-3286229FE84B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AF462010-C0CE-4F9E-AEB3-3286229FE84B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +54,7 @@ Global
 		{1A9E9367-03DA-4C83-856A-DCC8D83CC869} = {282CC2CB-7F52-4C94-B107-A51781DF9EE7}
 		{EBB9DAB3-C05F-4701-B1E2-2FA6060F9D2A} = {282CC2CB-7F52-4C94-B107-A51781DF9EE7}
 		{305723E9-7568-4AEF-B048-40BAB89655A2} = {282CC2CB-7F52-4C94-B107-A51781DF9EE7}
+		{AF462010-C0CE-4F9E-AEB3-3286229FE84B} = {1DDA468E-71A1-4C34-9018-32A33FF288C5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {9C410841-CCAF-455A-8128-0C3F82541CF3}
