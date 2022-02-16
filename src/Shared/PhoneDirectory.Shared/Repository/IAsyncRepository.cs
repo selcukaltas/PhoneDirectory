@@ -11,6 +11,7 @@ namespace PhoneDirectory.Shared.Repository
     public interface IAsyncRepository<T> where T : IAggregateRoot,IEntity
     {
         Task<T> Get(Expression<Func<T, bool>> filter);
+        Task<T> Get(Expression<Func<T, bool>> filter,string include);
         Task<List<T>> GetAllAsync();
         Task<T> AddAsync(T entity);
         Task UpdateAsync(T entity);

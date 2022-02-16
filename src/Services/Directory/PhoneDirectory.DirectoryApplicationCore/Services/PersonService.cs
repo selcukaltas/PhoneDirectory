@@ -1,4 +1,5 @@
-﻿using PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate;
+﻿using AutoMapper;
+using PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate;
 using PhoneDirectory.DirectoryApplicationCore.DTOs;
 using PhoneDirectory.DirectoryApplicationCore.Interfaces;
 using PhoneDirectory.Shared.Repository;
@@ -14,34 +15,73 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
     public class PersonService : IPersonService
     {
         private readonly IAsyncRepository<Person> _personRepository;
-        private readonly IAsyncRepository<Person> _personRepository;
-        public PersonService(IAsyncRepository<Person> personRepository)
+        private readonly IMapper _mapper;
+
+        public PersonService(IAsyncRepository<Person> personRepository,IMapper mapper)
         {
+            _mapper= mapper;    
             _personRepository = personRepository;
         }
-        public Task<Response<PersonDto>> CreatePerson(PersonDto personDto)
+        public async Task<Response<PersonDto>> CreatePerson(PersonDto personDto)
         {
-            throw new NotImplementedException();
+            var person = new Person(personDto.Id,personDto.Name,personDto.Surname,personDto.Company);
+
+            var personAdded= await _personRepository.AddAsync(person);
+
+            return Response<PersonDto>.Success(_mapper.Map<PersonDto>(personAdded), 200);
         }
 
-        public Task<Response<NoContent>> DeletePerson(Guid personId)
+        public async Task<Response<NoContent>> DeletePerson(Guid personId)
         {
-            throw new NotImplementedException();
+            var deletedPerson = await _personRepository.Get(x=>x.Id==personId);
+
+            if(deletedPerson != null)
+            {
+                await _personRepository.DeleteAsync(deletedPerson);
+                return Response<NoContent>.Success(204);
+            }
+            else
+            {
+                return Response<NoContent>.Fail("Person not found", 404);
+            }
         }
 
-        public Task<Response<List<PersonDto>>> GetAllPersons()
+        public async Task<Response<List<PersonDto>>> GetAllPersons()
         {
-            throw new NotImplementedException();
+            var persons = await _personRepository.GetAllAsync();
+
+            return Response<List<PersonDto>>.Success(_mapper.Map<List<PersonDto>>(persons), 200);
         }
 
-        public Task<Response<PersonDto>> GetPerson(Guid personId)
+        public async Task<Response<PersonDto>> GetPerson(Guid personId)
         {
-            throw new NotImplementedException();
+            var person = await _personRepository.Get(x=>x.Id == personId);  
+
+            if (person == null)
+            {
+                return Response<PersonDto>.Fail("Person not found", 404);
+            }
+
+            return Response<PersonDto>.Success(_mapper.Map<PersonDto>(person), 200);
         }
 
-        public Task<Response<PersonDetailDto>> GetPersonDetail(Guid personId)
+        public async Task<Response<PersonDetailDto>> GetPersonDetail(Guid personId)
         {
-            throw new NotImplementedException();
+            var person = await _personRepository.Get(p => p.Id == personId, "ContactInformations");
+
+            if (person==null)
+            {
+                return Response<PersonDetailDto>.Fail("Person not found", 404);
+            }
+
+            PersonDetailDto personDetailDto = new();
+
+            personDetailDto.Person.Name=person.Name;
+            personDetailDto.Person.Surname=person.Surname;
+            personDetailDto.Person.Company=person.Company;
+            personDetailDto.ContactInformations= (List<ContactInformationDto>)person.ContactInformations;
+
+            return Response<PersonDetailDto>.Success(personDetailDto, 200);
         }
     }
 }

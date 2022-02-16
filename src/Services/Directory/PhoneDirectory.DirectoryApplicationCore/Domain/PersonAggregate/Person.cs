@@ -20,7 +20,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate
 
         private Person() { } //Ef Required
 
-        public Person(Guid personId, string name, string surname,string company, List<ContactInformation> contactInformations)
+        public Person(Guid personId, string name, string surname,string company)
         {
             if (string.IsNullOrWhiteSpace(personId.ToString())) throw new ArgumentNullException(nameof(personId));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
@@ -34,7 +34,6 @@ namespace PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate
 
             Surname = surname;
             Company = company;
-            _contactInformations = contactInformations;
         }
     }
 }

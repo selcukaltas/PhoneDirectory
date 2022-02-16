@@ -39,6 +39,10 @@ namespace PhoneDirectory.DirectoryInfrastructure
         {
             return await _dbContext.Set<T>().SingleOrDefaultAsync(filter);
         }
+        public async Task<T> Get(Expression<Func<T, bool>> filter,string include)
+        {
+            return await _dbContext.Set<T>().Include(include).SingleOrDefaultAsync(filter);
+        }
 
         public async Task<List<T>> GetAllAsync()
         {
