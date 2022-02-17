@@ -17,12 +17,10 @@ namespace PhoneDirectory.ReportApplicationCore.Domain
 
         private ReportDetail() { }
 
-        public ReportDetail(Guid id, Guid reportId, int personCount, int numberCount, string location)
+        public ReportDetail(Guid reportId, int personCount, int numberCount, string location)
         {
-            if (string.IsNullOrWhiteSpace(id.ToString())) throw new ArgumentNullException(nameof(id));
             if (string.IsNullOrWhiteSpace(reportId.ToString())) throw new ArgumentNullException(nameof(reportId));
             if (string.IsNullOrWhiteSpace(location)) throw new ArgumentNullException(nameof(location));
-            Id = id;
             ReportId = reportId;
             PersonCount = personCount;
             NumberCount = numberCount;

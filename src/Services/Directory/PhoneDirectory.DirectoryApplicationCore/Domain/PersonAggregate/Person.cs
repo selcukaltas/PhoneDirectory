@@ -20,18 +20,15 @@ namespace PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate
 
         private Person() { } //Ef Required
 
-        public Person(Guid personId, string name, string surname,string company)
+        public Person( string name, string surname,string company)
         {
-            if (string.IsNullOrWhiteSpace(personId.ToString())) throw new ArgumentNullException(nameof(personId));
             if (string.IsNullOrWhiteSpace(name)) throw new ArgumentNullException(nameof(name));
             if (string.IsNullOrWhiteSpace(company)) throw new ArgumentNullException(nameof(company));
             if (string.IsNullOrWhiteSpace(surname)) throw new ArgumentNullException(nameof(surname));
 
 
-            Id = personId;
 
             Name = name;
-
             Surname = surname;
             Company = company;
         }

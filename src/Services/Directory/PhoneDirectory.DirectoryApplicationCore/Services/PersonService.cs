@@ -24,7 +24,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
         }
         public async Task<Response<PersonDto>> CreatePerson(PersonDto personDto)
         {
-            var person = new Person(personDto.Id,personDto.Name,personDto.Surname,personDto.Company);
+            var person = new Person(personDto.Name,personDto.Surname,personDto.Company);
 
             var personAdded= await _personRepository.AddAsync(person);
 

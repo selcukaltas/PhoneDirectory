@@ -17,15 +17,13 @@ namespace PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate
 
         private ContactInformation() { }
 
-        public ContactInformation(Guid informationId, InformationType informationType, string informationContent, Guid personId)
+        public ContactInformation( InformationType informationType, string informationContent, Guid personId)
         {
 
             if (string.IsNullOrWhiteSpace(personId.ToString())) throw new ArgumentNullException(nameof(personId));
-            if (string.IsNullOrWhiteSpace(informationId.ToString())) throw new ArgumentNullException(nameof(informationId));
             if (string.IsNullOrWhiteSpace(informationContent)) throw new ArgumentNullException(nameof(informationContent));
 
 
-            Id = personId;
             InformationType = informationType;
             InformationContent = informationContent;
             PersonId = personId;

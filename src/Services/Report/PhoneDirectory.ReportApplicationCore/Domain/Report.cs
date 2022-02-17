@@ -21,10 +21,8 @@ namespace PhoneDirectory.ReportApplicationCore.Domain
         {
 
         }
-        public Report(Guid id, DateTime requestDate, ReportStatus reportStatus)
+        public Report(DateTime requestDate, ReportStatus reportStatus)
         {
-            if (string.IsNullOrWhiteSpace(id.ToString())) throw new ArgumentNullException(nameof(id));
-            Id = id;
             RequestDate = requestDate;
             ReportStatus = reportStatus;
         }

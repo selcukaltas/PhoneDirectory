@@ -30,7 +30,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
             var person =await _personRepo.Get(x => x.Id == contactInformationDto.PersonId);
             if (person == null) { return Response<ContactInformationDto>.Fail("Person not found", 404); }
 
-            var contactInformation = new ContactInformation(contactInformationDto.Id, contactInformationDto.InformationType, contactInformationDto.InformationContent, person.Id);
+            var contactInformation = new ContactInformation(contactInformationDto.InformationType, contactInformationDto.InformationContent, person.Id);
 
             var contactInfoAdd = await _contactInformationRepo.AddAsync(contactInformation);
             return Response<ContactInformationDto>.Success(_mapper.Map<ContactInformationDto>(contactInfoAdd), 201);
