@@ -28,7 +28,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
 
             var personAdded= await _personRepository.AddAsync(person);
 
-            return Response<PersonDto>.Success(_mapper.Map<PersonDto>(personAdded), 200);
+            return Response<PersonDto>.Success(_mapper.Map<PersonDto>(personAdded), 201);
         }
 
         public async Task<Response<NoContent>> DeletePerson(Guid personId)

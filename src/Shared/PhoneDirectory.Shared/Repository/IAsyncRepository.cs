@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory.Shared.Repository
 {
-    public interface IAsyncRepository<T> where T : IAggregateRoot,IEntity
+    public interface IAsyncRepository<T> where T : IEntity
     {
         Task<T> Get(Expression<Func<T, bool>> filter);
         Task<T> Get(Expression<Func<T, bool>> filter,string include);
