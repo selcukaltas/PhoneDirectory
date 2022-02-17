@@ -13,6 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Shared\PhoneDirectory.Shared\PhoneDirectory.Shared.csproj" />
     <ProjectReference Include="..\PhoneDirectory.DirectoryApplicationCore\PhoneDirectory.DirectoryApplicationCore.csproj" />
+    <ProjectReference Include="..\PhoneDirectory.DirectoryInfrastructure\PhoneDirectory.DirectoryInfrastructure.csproj" />
   </ItemGroup>
 
 </Project>
