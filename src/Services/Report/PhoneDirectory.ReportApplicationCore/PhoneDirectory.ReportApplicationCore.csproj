@@ -6,4 +6,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Shared\PhoneDirectory.Shared\PhoneDirectory.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
