@@ -4,6 +4,8 @@ using PhoneDirectory.Shared.ControllerBase;
 
 namespace PhoneDirectory.DirectoryAPI.Controllers
 {
+    [Route("api/[Controller]/[Action]")]
+    [ApiController]
     public class ReportRequestController : CustomBaseController
     {
         private readonly ICommunicationService _communicationService;
@@ -12,9 +14,10 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
         {
             _communicationService = communicationService;
         }
+        [HttpPost]
         public async Task<IActionResult> PrepareReport()
         {
-           var response =  await _communicationService.Publish();
+            var response = await _communicationService.Publish();
             return CreateActionResultInstance(response);
         }
     }

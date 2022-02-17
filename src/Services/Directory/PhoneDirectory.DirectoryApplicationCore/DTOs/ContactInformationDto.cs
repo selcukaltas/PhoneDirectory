@@ -9,6 +9,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.DTOs
 {
     public class ContactInformationDto
     {
+        public Guid Id { get; set; }
         public InformationType InformationType { get; set; }
         public string InformationContent { get; set; }
         public Guid PersonId { get; set; }

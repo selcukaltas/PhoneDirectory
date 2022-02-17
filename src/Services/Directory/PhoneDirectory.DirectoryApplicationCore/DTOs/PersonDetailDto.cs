@@ -8,7 +8,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.DTOs
 {
     public class PersonDetailDto
     {
-        public PersonDto Person { get; set; }
+        public PersonDto Person { get; set; } = new();
         public List<ContactInformationDto> ContactInformations { get; set; } = new();
     }
 }

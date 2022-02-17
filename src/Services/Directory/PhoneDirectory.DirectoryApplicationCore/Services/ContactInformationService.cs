@@ -19,13 +19,14 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
         private readonly IMapper _mapper;
 
 
-        public ContactInformationService(IAsyncRepository<ContactInformation> contactInformationRepo, IMapper mapper)
+        public ContactInformationService(IAsyncRepository<ContactInformation> contactInformationRepo, IAsyncRepository<Person> personRepo, IMapper mapper)
         {
             _contactInformationRepo = contactInformationRepo;
+            _personRepo = personRepo;
             _mapper = mapper;
         }
 
-        public async Task<Response<ContactInformationDto>> CreateContactInformation(ContactInformationDto contactInformationDto)
+        public async Task<Response<ContactInformationDto>> CreateContactInformation(CreateContactInfoDto contactInformationDto)
         {
             var person =await _personRepo.Get(x => x.Id == contactInformationDto.PersonId);
             if (person == null) { return Response<ContactInformationDto>.Fail("Person not found", 404); }

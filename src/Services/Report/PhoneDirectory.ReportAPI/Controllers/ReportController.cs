@@ -4,6 +4,8 @@ using PhoneDirectory.Shared.ControllerBase;
 
 namespace PhoneDirectory.ReportAPI.Controllers
 {
+    [Route("api/[Controller]/[Action]")]
+    [ApiController]
     public class ReportController : CustomBaseController
     {
         private readonly IReportService _reportService;

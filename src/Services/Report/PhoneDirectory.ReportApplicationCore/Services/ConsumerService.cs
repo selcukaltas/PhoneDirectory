@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -12,47 +13,79 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory.ReportApplicationCore.Services
 {
-    public static class ConsumerService
+    public class ConsumerService
     {
-      
-        public static IApplicationBuilder UseRabbitMq(this IApplicationBuilder app)
+        private readonly IServiceProvider _serviceProvider;
+        ConnectionFactory factory { get; set; }
+        IConnection connection { get; set; }
+        IModel channel { get; set; }
+
+
+        public ConsumerService(IServiceProvider serviceProvider)
+
         {
             IConfigurationRoot configuration = new ConfigurationBuilder()
-           .SetBasePath(Directory.GetCurrentDirectory())
-           .AddJsonFile("appsettings.json")
-           .Build();
+.SetBasePath(Directory.GetCurrentDirectory())
+.AddJsonFile("appsettings.json")
+.Build();
             var conn = configuration["RabbitMq"];
+            this.factory = new ConnectionFactory() { Uri = new Uri(conn) };
+            this.connection = factory.CreateConnection();
+            this.channel = connection.CreateModel();
+            _serviceProvider = serviceProvider;
+        }
 
-            var createDocumentQueue = "create_document_queue";
-            var documentCreateExchange = "document_create_exchange";
+        public  void Register()
+        {
 
-            ConnectionFactory connectionFactory = new()
+            channel.QueueDeclare(queue: "create-document", durable: false, exclusive: false, autoDelete: false, arguments: null);
+            var message = "";
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += (model, ea) =>
             {
-                Uri = new Uri(conn)
+                var body = ea.Body.ToArray();
+                message = Encoding.UTF8.GetString(body);
+                int m = 0;
+
             };
+            var _reportService = _serviceProvider.GetRequiredService<IReportService>();
+            _reportService.PrepareReportDetail(new Guid(message)).ConfigureAwait(false);
+            channel.BasicConsume(queue: "create-document", autoAck: true, consumer: consumer);
+        }
 
-            var connection = connectionFactory.CreateConnection();
+        public void Deregister()
+        {
+            this.connection.Close();
+        }
 
-            var channel = connection.CreateModel();
-            channel.ExchangeDeclare(documentCreateExchange, "direct");
 
-            channel.QueueDeclare(createDocumentQueue, false, false, false);
-            channel.QueueBind(createDocumentQueue, documentCreateExchange, createDocumentQueue);
+    }
+    public static class ApplicationBuilderExtentions
+    {
+        private static ConsumerService _listener { get; set; }
 
-            var consumerEvent = new EventingBasicConsumer(channel);
+        public static IApplicationBuilder UseRabbitListener(this IApplicationBuilder app)
+        {
+            _listener = app.ApplicationServices.GetService<ConsumerService>();
 
-            consumerEvent.Received += (ch, ea) =>
-            {
-                var reportService = app.ApplicationServices.CreateScope().ServiceProvider.GetRequiredService<IReportService>();
-                var reportId = JsonConvert.DeserializeObject<Guid>(Encoding.UTF8.GetString(ea.Body.ToArray()));
-                Console.WriteLine("Data received");
-                Console.WriteLine($"Received Id: {reportId}");
-                reportService.PrepareReportDetail(reportId);
-            };
+            var lifetime = app.ApplicationServices.GetService<IApplicationLifetime>();
 
-            channel.BasicConsume(createDocumentQueue, true, consumerEvent);
+            lifetime.ApplicationStarted.Register(OnStarted);
+
+            lifetime.ApplicationStopping.Register(OnStopping);
 
             return app;
         }
+
+        private static void OnStarted()
+        {
+            _listener.Register();
+        }
+
+        private static void OnStopping()
+        {
+            _listener.Deregister();
+        }
     }
 }
+

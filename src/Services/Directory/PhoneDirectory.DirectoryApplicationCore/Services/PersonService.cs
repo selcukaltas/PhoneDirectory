@@ -22,7 +22,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
             _mapper= mapper;    
             _personRepository = personRepository;
         }
-        public async Task<Response<PersonDto>> CreatePerson(PersonDto personDto)
+        public async Task<Response<PersonDto>> CreatePerson(CreatePersonDto personDto)
         {
             var person = new Person(personDto.Name,personDto.Surname,personDto.Company);
 
@@ -38,7 +38,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
             if(deletedPerson != null)
             {
                 await _personRepository.DeleteAsync(deletedPerson);
-                return Response<NoContent>.Success(204);
+                return Response<NoContent>.Success(200);
             }
             else
             {

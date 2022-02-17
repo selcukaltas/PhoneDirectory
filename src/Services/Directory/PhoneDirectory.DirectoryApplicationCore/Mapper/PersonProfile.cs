@@ -14,6 +14,9 @@ namespace PhoneDirectory.DirectoryApplicationCore.Mapper
         public PersonProfile()
         {
             CreateMap<PersonDto, Person>().ReverseMap();
+            CreateMap<CreatePersonDto, Person>().ReverseMap();
+            CreateMap<CreateContactInfoDto, ContactInformation>().ReverseMap();
+            CreateMap<ContactInformationDto, ContactInformation>().ReverseMap();
         }
     }
 }

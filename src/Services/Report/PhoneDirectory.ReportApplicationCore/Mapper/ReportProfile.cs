@@ -14,6 +14,8 @@ namespace PhoneDirectory.ReportApplicationCore.Mapper
         public ReportProfile()
         {
             CreateMap<ReportDto, Report>().ReverseMap();
+            CreateMap<DetailsDto, ReportDetail>().ReverseMap();
+            CreateMap<DetailsDto, Report>().ReverseMap();
 
         }
     }

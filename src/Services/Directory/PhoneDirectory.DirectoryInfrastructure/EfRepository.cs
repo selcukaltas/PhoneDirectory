@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory.DirectoryInfrastructure
 {
-    public class EfRepository<T> : IAsyncRepository<T> where T : class,IEntity, IAggregateRoot
+    public class EfRepository<T> : IAsyncRepository<T> where T : class,IEntity
     {
         protected readonly DirectoryDbContext _dbContext;
 

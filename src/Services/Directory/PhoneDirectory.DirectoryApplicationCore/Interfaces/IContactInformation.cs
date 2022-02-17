@@ -10,7 +10,7 @@ namespace PhoneDirectory.DirectoryApplicationCore.Interfaces
 {
     public interface IContactInformation
     {
-        Task<Response<ContactInformationDto>> CreateContactInformation(ContactInformationDto contactInformationDto);
+        Task<Response<ContactInformationDto>> CreateContactInformation(CreateContactInfoDto contactInformationDto);
         Task<Response<NoContent>> DeleteContactInformation(Guid contactInformationId);
         Task<Response<List<ContactInformationDto>>> GetAllContactInformations();
     }

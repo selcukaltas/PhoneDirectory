@@ -5,7 +5,7 @@ using PhoneDirectory.Shared.ControllerBase;
 
 namespace PhoneDirectory.DirectoryAPI.Controllers
 {
-    [Route("api/[Controller]")]
+    [Route("api/[Controller]/[Action]")]
     [ApiController]
     public class PersonController : CustomBaseController
     {
@@ -44,7 +44,7 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreatePerson([FromBody] PersonDto personDto)
+        public async Task<IActionResult> CreatePerson([FromBody] CreatePersonDto personDto)
         {
             var response = await _personService.CreatePerson(personDto);
 
@@ -52,7 +52,7 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<IActionResult> Delete(Guid id)
+        public async Task<IActionResult> PersonDelete(Guid id)
         {
             var response = await _personService.DeletePerson(id);
 
@@ -66,7 +66,7 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
             return CreateActionResultInstance(response);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateContactInformation( [FromBody] ContactInformationDto contactInformationDto)
+        public async Task<IActionResult> CreateContactInformation( [FromBody] CreateContactInfoDto contactInformationDto)
         {
            
 

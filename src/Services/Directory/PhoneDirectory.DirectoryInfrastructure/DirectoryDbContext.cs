@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using PhoneDirectory.DirectoryApplicationCore.Domain.PersonAggregate;
 using PhoneDirectory.Shared.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -19,29 +20,9 @@ namespace PhoneDirectory.DirectoryInfrastructure
 
         }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-        }
-        public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        {
-            var AddedEntities = ChangeTracker.Entries().Where(E => E.Entity is IEntity && E.State == EntityState.Added).ToList();
 
-            AddedEntities.ForEach(E =>
-            {
-                E.Property("CreatedAt").CurrentValue = DateTime.Now;
-                E.Property("UpdatedAt").CurrentValue = DateTime.Now;
+        public virtual DbSet<Person> Persons { get; set; }
+        public virtual DbSet<ContactInformation> ContactInformations { get; set; }
 
-            });
-
-            var EditedEntities = ChangeTracker.Entries().Where(E => E.Entity is IEntity && E.State == EntityState.Modified).ToList();
-
-            EditedEntities.ForEach(E =>
-            {
-                E.Property("UpdatedAt").CurrentValue = DateTime.Now;
-            });
-            return base.SaveChangesAsync(cancellationToken);
-        }
-      
     }
 }

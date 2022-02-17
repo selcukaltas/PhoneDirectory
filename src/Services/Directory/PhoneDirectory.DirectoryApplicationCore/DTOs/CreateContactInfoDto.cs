@@ -7,11 +7,10 @@ using System.Threading.Tasks;
 
 namespace PhoneDirectory.DirectoryApplicationCore.DTOs
 {
-    public class PersonDto
+    public class CreateContactInfoDto
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Company { get; set; }
+        public InformationType InformationType { get; set; }
+        public string InformationContent { get; set; }
+        public Guid PersonId { get; set; }
     }
 }

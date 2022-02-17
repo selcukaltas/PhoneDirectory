@@ -19,8 +19,8 @@ namespace PhoneDirectory.ReportApplicationCore.Services
         private readonly IAsyncRepository<ReportDetail> _reportDetailRepository;
         private readonly IMapper _mapper;
         private readonly IHttpClientFactory _httpClientFactory;
-        private readonly ILogger _logger;
-        public ReportService(IAsyncRepository<Report> reportRepository, IMapper mapper, IHttpClientFactory httpClientFactory, ILogger logger)
+        private readonly ILogger<ReportService> _logger;
+        public ReportService(IAsyncRepository<Report> reportRepository, IMapper mapper, IHttpClientFactory httpClientFactory, ILogger<ReportService> logger)
         {
             _reportRepository = reportRepository;
             _mapper = mapper;
@@ -29,11 +29,11 @@ namespace PhoneDirectory.ReportApplicationCore.Services
         }
         public async Task<Response<Guid>> CreateReport()
         {
-            var report = new Report(DateTime.Now, ReportStatus.Preparing);
+            var report = new Report(DateTime.UtcNow, ReportStatus.Preparing);
 
-            await _reportRepository.AddAsync(report);
+            var reportAdded= await _reportRepository.AddAsync(report);
 
-            return Response<Guid>.Success(report.Id, 201);
+            return Response<Guid>.Success(reportAdded.Id, 201);
 
         }
 

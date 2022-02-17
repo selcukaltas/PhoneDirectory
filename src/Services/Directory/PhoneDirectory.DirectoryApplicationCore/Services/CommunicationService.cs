@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PhoneDirectory.DirectoryApplicationCore.Config;
 using PhoneDirectory.DirectoryApplicationCore.Interfaces;
 using PhoneDirectory.Shared.Result;
@@ -23,36 +24,49 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
         public async Task<Response<NoContent>> Publish()
         {
             var client = _httpClientFactory.CreateClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:5001/api/ReportRequest/");
+            var request = new HttpRequestMessage(HttpMethod.Post, $"http://localhost:5001/api/Report/ReportRequest/");
             var response = await client.SendAsync(request);
 
             if (!response.IsSuccessStatusCode)
-                return Response<NoContent>.Fail("Something went wrong",500);
+                return Response<NoContent>.Fail("Something went wrong", 500);
 
             var responseStream = await response.Content.ReadAsStringAsync();
 
 
-            var reportId = JsonConvert.DeserializeObject<Guid>(responseStream);
+            var reportId = (JObject)JsonConvert.DeserializeObject(responseStream);
 
             var conn = _configHelper.RabbitMqCon;
 
-            var createDocumentQueue = "create_document_queue";
-            var documentCreateExchange = "document_create_exchange";
+            //var createDocumentQueue = "create_document_queue";
+            //var documentCreateExchange = "document_create_exchange";
 
-            ConnectionFactory connectionFactory = new()
+            //ConnectionFactory connectionFactory = new()
+            //{
+            //    Uri = new Uri(conn)
+            //};
+
+            //var connection = connectionFactory.CreateConnection();
+
+            //var channel = connection.CreateModel();
+            //channel.ExchangeDeclare(documentCreateExchange, "direct");
+
+            //channel.QueueDeclare(createDocumentQueue, false, false, false);
+            //channel.QueueBind(createDocumentQueue, documentCreateExchange, createDocumentQueue);
+
+            //channel.BasicPublish(documentCreateExchange, createDocumentQueue, null, Encoding.UTF8.GetBytes(reportId["data"].ToString()));
+            var factory = new ConnectionFactory() { Uri= new Uri(conn) };
+            using (var connection = factory.CreateConnection())
+            using (var channel = connection.CreateModel())
             {
-                Uri = new Uri(conn)
-            };
+                channel.QueueDeclare(queue:"create-document", durable: false, exclusive: false, autoDelete: false, arguments: null);
 
-            var connection = connectionFactory.CreateConnection();
+                var body = Encoding.UTF8.GetBytes(reportId["data"].ToString());
 
-            var channel = connection.CreateModel();
-            channel.ExchangeDeclare(documentCreateExchange, "direct");
+                channel.BasicPublish(exchange:"", routingKey:"create-document", basicProperties: null, body: body);
+                Console.WriteLine(" [x] Sent {0}", reportId["data"].ToString());
+            }
 
-            channel.QueueDeclare(createDocumentQueue, false, false, false);
-            channel.QueueBind(createDocumentQueue, documentCreateExchange, createDocumentQueue);
-
-            channel.BasicPublish(documentCreateExchange, createDocumentQueue, null, Encoding.UTF8.GetBytes(reportId.ToString()));
+          
 
             return Response<NoContent>.Success(202);
         }
