@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using PhoneDirectory.DirectoryApplicationCore.Config;
 using PhoneDirectory.DirectoryApplicationCore.Interfaces;
 using PhoneDirectory.Shared.Result;
 using RabbitMQ.Client;
@@ -13,9 +14,11 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
     public class CommunicationService : ICommunicationService
     {
         private readonly IHttpClientFactory _httpClientFactory;
-        public CommunicationService(IHttpClientFactory httpClientFactory)
+        private readonly ConfigHelper _configHelper;
+        public CommunicationService(IHttpClientFactory httpClientFactory, ConfigHelper configHelper)
         {
             _httpClientFactory = httpClientFactory;
+            _configHelper = configHelper;
         }
         public async Task<Response<NoContent>> Publish()
         {
@@ -28,10 +31,10 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
 
             var responseStream = await response.Content.ReadAsStringAsync();
 
-            
-             var reportId = JsonConvert.DeserializeObject<Guid>(responseStream)
 
-            var conn = _phoneBookSettings.RabbitMqCon;
+            var reportId = JsonConvert.DeserializeObject<Guid>(responseStream);
+
+            var conn = _configHelper.RabbitMqCon;
 
             var createDocumentQueue = "create_document_queue";
             var documentCreateExchange = "document_create_exchange";
@@ -50,6 +53,8 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
             channel.QueueBind(createDocumentQueue, documentCreateExchange, createDocumentQueue);
 
             channel.BasicPublish(documentCreateExchange, createDocumentQueue, null, Encoding.UTF8.GetBytes(reportId.ToString()));
+
+            return Response<NoContent>.Success(202);
         }
     }
 }
