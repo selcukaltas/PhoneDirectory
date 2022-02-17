@@ -14,7 +14,7 @@ namespace PhoneDirectory.ReportApplicationCore.Domain
         public ReportStatus ReportStatus { get; private set; }
 
         private readonly List<ReportDetail> _reportDetails = new();
-        public IReadOnlyCollection<ReportDetail> ContactInformations => _reportDetails.AsReadOnly();
+        public IReadOnlyCollection<ReportDetail> ReportDetails => _reportDetails.AsReadOnly();
         public Guid Id { get; private set; }
 
         private Report()
@@ -25,6 +25,11 @@ namespace PhoneDirectory.ReportApplicationCore.Domain
         {
             RequestDate = requestDate;
             ReportStatus = reportStatus;
+        }
+        public void UpdateStatus(ReportStatus status)
+        {
+
+            ReportStatus = status;
         }
     }
     public enum ReportStatus

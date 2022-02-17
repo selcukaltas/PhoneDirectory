@@ -11,7 +11,7 @@ namespace PhoneDirectory.ReportApplicationCore.Services
     public interface IReportService
     {
         Task<Response<Guid>> CreateReport();
-        Task<Response<NoContent>> PrepareReportDetail(Guid reportId);
+        Task PrepareReportDetail(Guid reportId);
         Task<Response<List<ReportDto>>> GetAllReports();
         Task<Response<DetailsDto>> GetReportDetail(Guid reportId);
     }
