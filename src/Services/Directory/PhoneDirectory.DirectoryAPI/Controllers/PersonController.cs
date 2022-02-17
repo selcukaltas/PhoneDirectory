@@ -10,10 +10,12 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
     public class PersonController : CustomBaseController
     {
         private readonly IPersonService _personService;
+        private readonly IContactInformation _contactInformationService;
 
-        public PersonController(IPersonService personService)
+        public PersonController(IPersonService personService, IContactInformation contactInformationService)
         {
             _personService = personService;
+            _contactInformationService = contactInformationService;
         }
 
 
@@ -53,6 +55,30 @@ namespace PhoneDirectory.DirectoryAPI.Controllers
         public async Task<IActionResult> Delete(Guid id)
         {
             var response = await _personService.DeletePerson(id);
+
+            return CreateActionResultInstance(response);
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllContactInformations()
+        {
+            var response = await _contactInformationService.GetAllContactInformations();
+
+            return CreateActionResultInstance(response);
+        }
+        [HttpPost]
+        public async Task<IActionResult> CreateContactInformation( [FromBody] ContactInformationDto contactInformationDto)
+        {
+           
+
+            var response = await _contactInformationService.CreateContactInformation(contactInformationDto);
+
+            return CreateActionResultInstance(response);
+        }
+
+        [HttpDelete("{Id}")]
+        public async Task<IActionResult> DeleteContactInformation([FromRoute] Guid Id)
+        {
+            var response = await _contactInformationService.DeleteContactInformation(Id);
 
             return CreateActionResultInstance(response);
         }

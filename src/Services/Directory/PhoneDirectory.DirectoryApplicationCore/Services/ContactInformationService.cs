@@ -25,12 +25,12 @@ namespace PhoneDirectory.DirectoryApplicationCore.Services
             _mapper = mapper;
         }
 
-        public async Task<Response<ContactInformationDto>> CreateContactInformation(Guid personId, ContactInformationDto contactInformationDto)
+        public async Task<Response<ContactInformationDto>> CreateContactInformation(ContactInformationDto contactInformationDto)
         {
-            var person = _personRepo.Get(x => x.Id == personId);
+            var person =await _personRepo.Get(x => x.Id == contactInformationDto.PersonId);
             if (person == null) { return Response<ContactInformationDto>.Fail("Person not found", 404); }
 
-            var contactInformation = new ContactInformation(contactInformationDto.Id, contactInformationDto.InformationType, contactInformationDto.InformationContent,personId);
+            var contactInformation = new ContactInformation(contactInformationDto.Id, contactInformationDto.InformationType, contactInformationDto.InformationContent, person.Id);
 
             var contactInfoAdd = await _contactInformationRepo.AddAsync(contactInformation);
             return Response<ContactInformationDto>.Success(_mapper.Map<ContactInformationDto>(contactInfoAdd), 201);
