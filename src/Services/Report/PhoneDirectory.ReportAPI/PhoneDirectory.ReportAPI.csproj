@@ -11,7 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+    <ProjectReference Include="..\..\..\Shared\PhoneDirectory.Shared\PhoneDirectory.Shared.csproj" />
+    <ProjectReference Include="..\PhoneDirectory.ReportApplicationCore\PhoneDirectory.ReportApplicationCore.csproj" />
   </ItemGroup>
 
 </Project>
