@@ -3,7 +3,7 @@ This project micro service implementation for person and report domains. The ddd
 
 # Requirements
 
-* .NET 5
+* .NET 5 - .NET 6
 * .PostgreSql
 * .Docker
 * .RabbitMq
